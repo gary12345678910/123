@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% block title %}
+    <title>ATM</title>
+    {% endblock %}
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+      integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+      crossorigin="anonymous" />
+
+    <!-- Add additional CSS in static file -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+
+    <style>
+      body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f5f5f5;
+        margin: 0;
+        padding: 0;
+      }
+  
+      .sidebar {
+        background-color: #343a40;
+        color: #fff;
+        height: 100vh;
+        padding: 20px;
+        border-right: 3px solid black;
+      }
+  
+      .sidebar h4 {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+      }
+  
+      .sidebar-nav {
+        list-style: none;
+        padding: 0;
+      }
+  
+      .sidebar-nav li {
+        margin-bottom: 10px;
+      }
+  
+      .sidebar-nav a {
+        color: #fff;
+        text-decoration: none;
+        font-size: 1.1rem;
+        transition: color 0.3s ease;
+        
+      }
+  
+      .sidebar-nav a:hover {
+        color: #ffc107;
+      }
+      .nav-link{
+        color: #fff;
+        text-decoration: none;
+        font-size: 1.1rem;
+        transition: color 0.3s ease;
+        text-align: center;
+      }
+
+      .nav-link:hover {
+        background-color: #dcdcdc;
+        border-radius: 5px; 
+      }
+  
+      .content {
+        padding: 20px;
+        border-left: 3px solid black;
+        background-color: #ffffff;
+      }
+  
+      .pagination {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+  
+      .page-links {
+        display: flex;
+        list-style: none;
+        padding: 0;
+      }
+  
+      .page-links a {
+        margin: 0 5px;
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+        text-decoration: none;
+        color: #007bff;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+  
+      .page-links a:hover {
+        background-color: #84b0df;
+        color: #fff;
+      }
+  
+      .page-current a {
+        margin: 0 5px;
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+        background-color: #c3e0ff;
+        color: #fff;
+        text-decoration: none;
+      }
+      .navbar-brand{
+        margin-top: 5px;
+      }
+    </style>
+
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <h6 class="navbar-brand">使用者介面</h6>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="{% url 'index' %}">首頁</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'map' %}">ATM地圖</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'chart' %}">圖表</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'atms' %}">ATM列表</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                ATM功能
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="#">註冊帳號</a></li>
+                <li><a class="dropdown-item" href="#">存錢</a></li>
+                <li><a class="dropdown-item" href="#">領錢</a></li>
+              </ul>
+            </li>
+          </ul>
+          <form class="d-flex">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+          </form>
+        </div>
+      </div>
+    </nav>
+    
+    
+    
+    <div class="container-fluid">
+        <div class="row">
+          <!-- <div class="col-sm-2 sidebar">
+            {% block sidebar %}
+            <h4>使用者介面</h4>
+            <ul class="sidebar-nav">
+              <li><a href="{% url 'index' %}">首頁</a></li>
+              <li><a href="{% url 'map' %}">ATM地圖</a></li>
+              <li><a href="{% url 'chart' %}">圖表</a></li>
+              <li><a href="{% url 'atms' %}">ATM列表</a></li>
+            </ul>
+            {% endblock %}
+          </div> -->
+          
+          <div class="col-sm-11 " style="height: auto; text-align: center; ">
+                
+                {% block content %}{% endblock %}
+                {% block pagination %}
+                {% if is_paginated %}
+                  <div class="pagination">
+                    <span class="page-links">
+                      {% if page_obj.has_previous %}
+                        <li class="page-item"><a class="page-link" href="{{ request.path }}?page=1">第一頁</a></li>
+                        <li class="page-item"><a class="page-link" href="{{ request.path }}?page={{ page_obj.previous_page_number }}">上一頁</a></li>
+                      {% endif %}
+                      <span class="page-current">
+                        <li class="page-item"><a class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</a></li>
+                      </span>
+                      {% if page_obj.has_next %}
+                        <li class="page-item"><a class="page-link" href="{{ request.path }}?page={{ page_obj.next_page_number }}">下一頁</a></li>
+                        <li class="page-item"><a class="page-link" href="{{ request.path }}?page={{ paginator.num_pages }}">最後一頁</a></li>
+                      {% endif %}
+                    </span>
+                  </div>
+                {% endif %}
+              {% endblock %}
+          </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+  </body>
+
+</html>

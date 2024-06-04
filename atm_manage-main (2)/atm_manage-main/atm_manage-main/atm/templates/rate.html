@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .card{
+        margin-top: 10px;
+    }
+    img{
+        padding-top: 30px;
+    }
+    h4{
+        margin-top: 15px;
+    }
+</style>
+{% load static %}
+<div class="card mb-3 mx-auto" style="max-width: 1000px;">
+    <div class="row g-0">
+      <div class="col-md-4">
+        <img src="{% static 'img/USD.svg' %}" class="img-fluid rounded-start" alt="...">
+        <h4>美元USD</h4>
+      </div>
+      <div class="col-md-8">
+        <table class="table">
+            <thead>
+              <tr>
+                <th scope="col" class="text-left">項目</th>
+                <th scope="col">銀行買進</th>
+                <th scope="col">銀行賣出</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr> 
+                <td class="text-left">即期匯率</td>
+                <td>32.3500</td>
+                <td>32.4500</td>
+              </tr>
+              <tr>
+                <td class="text-left">數位通路優惠匯率</td>
+                <td>32.3800</td>
+                <td>32.4200</td>
+              </tr>
+              <tr>
+                <td class="text-left">現鈔匯率</td>
+                <td>32.0700</td>
+                <td>32.6700</td>
+              </tr>
+            </tbody>
+          </table>
+      </div>
+    </div>
+  </div>
+{% endblock %}
